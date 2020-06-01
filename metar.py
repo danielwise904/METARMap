@@ -47,7 +47,7 @@ BLINK_TOTALTIME_SECONDS	= 300
 pixels = neopixel.NeoPixel(LED_PIN, LED_COUNT, brightness = LED_BRIGHTNESS, pixel_order = LED_ORDER, auto_write = False)
 
 # Read the airports file to retrieve list of airports and use as order for LEDs
-with open("airports") as f:
+with open("/home/pi/METARMap/airports") as f:
 	airports = f.readlines()
 airports = [x.strip() for x in airports]
 
