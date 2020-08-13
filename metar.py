@@ -7,21 +7,21 @@ import neopixel
 import time
 
 # NeoPixel LED Configuration
-LED_COUNT			= 50				# Number of LED pixels.
+LED_COUNT			= 150				# Number of LED pixels.
 LED_PIN				= board.D18			# GPIO pin connected to the pixels (18 is PCM).
-LED_BRIGHTNESS			= 0.2				# Float from 0.0 (min) to 1.0 (max)
+LED_BRIGHTNESS			= 0.1				# Float from 0.0 (min) to 1.0 (max)
 LED_ORDER			= neopixel.GRB			# Strip type and colour ordering
 
 COLOR_VFR		= (255,0,0)			# Green
-COLOR_VFR_FADE		= (125,0,0)			# Green Fade for wind
+COLOR_VFR_FADE	= (125,0,0)			# Green Fade for wind
 COLOR_MVFR		= (0,0,255)			# Blue
-COLOR_MVFR_FADE		= (0,0,125)			# Blue Fade for wind
+COLOR_MVFR_FADE	= (0,0,125)			# Blue Fade for wind
 COLOR_IFR		= (0,255,0)			# Red
-COLOR_IFR_FADE		= (0,125,0)			# Red Fade for wind
+COLOR_IFR_FADE	= (0,125,0)			# Red Fade for wind
 COLOR_LIFR		= (0,125,125)			# Magenta
-COLOR_LIFR_FADE		= (0,75,75)			# Magenta Fade for wind
+COLOR_LIFR_FADE	= (0,75,75)			# Magenta Fade for wind
 COLOR_CLEAR		= (0,0,0)			# Clear
-COLOR_LIGHTNING		= (255,255,255)			# White
+COLOR_LIGHTNING	= (255,255,255)			# White
 
 # Do you want the METARMap to be static to just show flight conditions, or do you also want blinking/fading based on current wind conditions
 ACTIVATE_WINDCONDITION_ANIMATION = True		# Set this to False for Static or True for animated wind conditions
@@ -38,10 +38,6 @@ ALWAYS_BLINK_FOR_GUSTS	= False				# Always animate for Gusts (regardless of spee
 
 # Blinking Speed in seconds
 BLINK_SPEED		= 1.0				# Float in seconds, e.g. 0.5 for half a second
-
-# Total blinking time in seconds.
-# For example set this to 300 to keep blinking for 5 minutes if you plan to run the script every 5 minutes to fetch the updated weather
-BLINK_TOTALTIME_SECONDS	= 300
 
 # Initialize the LED strip
 pixels = neopixel.NeoPixel(LED_PIN, LED_COUNT, brightness = LED_BRIGHTNESS, pixel_order = LED_ORDER, auto_write = False)
@@ -81,9 +77,8 @@ for metar in root.iter('METAR'):
 	conditionDict[stationId] = { "flightCategory" : flightCategory, "windSpeed" : windSpeed, "windGust": windGust, "lightning": lightning }
 
 # Setting LED colors based on weather conditions
-looplimit = int(round(BLINK_TOTALTIME_SECONDS / BLINK_SPEED)) if (ACTIVATE_WINDCONDITION_ANIMATION or ACTIVATE_LIGHTNING_ANIMATION) else 1
 windCycle = False
-while looplimit > 0:
+while True:
 	i = 0
 	for airportcode in airports:
 		# Skip NULL entries
@@ -117,7 +112,6 @@ while looplimit > 0:
 	# Switching between animation cycles
 	time.sleep(BLINK_SPEED)
 	windCycle = False if windCycle else True
-	looplimit -= 1
 
 print()
 print("Done")
